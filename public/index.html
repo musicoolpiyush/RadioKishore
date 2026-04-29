@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>#RadioKishore — My Smule Stage</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-dim: #7a5c1e;
+  --gold-faint: rgba(201,168,76,0.08);
+  --deep: #080604;
+  --surface: #100d07;
+  --card: #181208;
+  --card-hover: #211908;
+  --text: #f0e8d5;
+  --muted: #8a7a5e;
+  --accent: #e05c2a;
+  --blue: #4a9eda;
+  --green: #4ab87a;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--deep);
+  color: var(--text);
+  font-family: 'Crimson Pro', Georgia, serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* grain */
+body::before {
+  content:''; position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:1000; opacity:0.5;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top:0; z-index:200;
+  background: rgba(8,6,4,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 28px; height:56px;
+}
+
+.nav-brand {
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem; font-weight:700;
+  color:var(--gold-light);
+  letter-spacing:0.02em;
+}
+
+.nav-tabs {
+  display:flex; gap:4px;
+}
+
+.nav-tab {
+  background:none; border:none;
+  padding: 8px 16px; border-radius:6px;
+  color:var(--muted); font-family:'Crimson Pro',serif;
+  font-size:0.9rem; cursor:pointer;
+  transition: all 0.2s; letter-spacing:0.04em;
+}
+
+.nav-tab:hover { color:var(--text); background:rgba(255,255,255,0.04); }
+.nav-tab.active { color:var(--gold-light); background:rgba(201,168,76,0.1); }
+
+.nav-status {
+  font-size:0.75rem; color:var(--muted);
+  display:flex; align-items:center; gap:6px;
+}
+
+.status-dot {
+  width:7px; height:7px; border-radius:50%;
+  background: var(--muted);
+  transition: background 0.3s;
+}
+.status-dot.loading { background:#f59e0b; animation: pulse 1s infinite; }
+.status-dot.done { background:var(--green); }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── HERO ── */
+.hero {
+  text-align:center; padding: 64px 24px 48px;
+  position:relative; overflow:hidden;
+}
+
+.hero::before {
+  content:''; position:absolute;
+  top:-40%; left:50%; transform:translateX(-50%);
+  width:70vw; height:60vh;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.hero-eyebrow {
+  font-size:0.72rem; letter-spacing:0.5em;
+  text-transform:uppercase; color:var(--gold);
+  opacity:0.8; margin-bottom:18px;
+}
+
+.hero-title {
+  font-family:'Playfair Display',serif;
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight:900; line-height:0.95;
+  color:var(--text);
+}
+
+.hero-title em {
+  font-style:italic; color:var(--gold-light);
+  display:block;
+}
+
+.hero-sub {
+  margin-top:20px; font-size:1.1rem;
+  color:var(--muted); font-weight:300;
+  font-style:italic;
+}
+
+.hero-divider {
+  display:flex; align-items:center; justify-content:center;
+  gap:14px; margin: 28px auto; max-width:320px;
+}
+.hero-divider-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold-dim),transparent); }
+.hero-divider-gem { color:var(--gold); opacity:0.6; }
+
+/* ── STATS BAR ── */
+.statsbar {
+  display:flex; justify-content:center; flex-wrap:wrap;
+  gap:0; border-top:1px solid rgba(201,168,76,0.1);
+  border-bottom:1px solid rgba(201,168,76,0.1);
+  margin-bottom:48px;
+}
+
+.stat-cell {
+  padding: 22px 36px; text-align:center;
+  border-right:1px solid rgba(201,168,76,0.08);
+  min-width:120px;
+}
+.stat-cell:last-child { border-right:none; }
+
+.stat-num {
+  font-family:'Playfair Display',serif;
+  font-size:1.8rem; color:var(--gold-light);
+  display:block; line-height:1;
+}
+.stat-label {
+  font-size:0.68rem; letter-spacing:0.2em;
+  text-transform:uppercase; color:var(--muted);
+  margin-top:5px;
+}
+
+/* ── PAGES ── */
+.page { display:none; }
+.page.active { display:block; }
+
+/* ── RECORDINGS PAGE ── */
+.recordings-controls {
+  max-width:1100px; margin:0 auto 28px; padding:0 24px;
+  display:flex; gap:12px; flex-wrap:wrap; align-items:center;
+}
+
+.search-wrap { flex:1; min-width:200px; position:relative; }
+.search-wrap input {
+  width:100%; background:rgba(255,255,255,0.04);
+  border:1px solid rgba(201,168,76,0.18); border-radius:8px;
+  padding:10px 16px 10px 40px; color:var(--text);
+  font-family:'Crimson Pro',serif; font-size:1rem; outline:none;
+  transition:border-color 0.25s;
+}
+.search-wrap input:focus { border-color:var(--gold-dim); }
+.search-wrap input::placeholder { color:var(--muted); }
+.search-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:0.95rem; }
+
+.filter-row { display:flex; gap:8px; flex-wrap:wrap; }
+
+.chip {
+  background:transparent; border:1px solid rgba(201,168,76,0.18);
+  border-radius:20px; padding:7px 16px;
+  color:var(--muted); font-family:'Crimson Pro',serif;
+  font-size:0.83rem; cursor:pointer; transition:all 0.2s;
+  letter-spacing:0.04em;
+}
+.chip:hover, .chip.active {
+  background:rgba(201,168,76,0.12); border-color:var(--gold-dim);
+  color:var(--gold-light);
+}
+
+.sort-select {
+  background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.18);
+  border-radius:8px; padding:9px 14px; color:var(--muted);
+  font-family:'Crimson Pro',serif; font-size:0.88rem;
+  cursor:pointer; outline:none; appearance:none;
+}
+.sort-select option { background:#181208; }
+
+/* Year filter dropdown */
+.year-select {
+  background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.18);
+  border-radius:8px; padding:9px 14px; color:var(--muted);
+  font-family:'Crimson Pro',serif; font-size:0.88rem;
+  cursor:pointer; outline:none; appearance:none;
+}
+.year-select option { background:#181208; }
+
+/* ── GRID ── */
+.grid {
+  max-width:1100px; margin:0 auto; padding:0 24px 60px;
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+  gap:20px;
+}
+
+.card {
+  background:var(--card); border:1px solid rgba(201,168,76,0.1);
+  border-radius:12px; overflow:hidden;
+  transition:transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  animation:fadeUp 0.4s ease both;
+  cursor:pointer;
+}
+
+.card:hover {
+  transform:translateY(-4px);
+  border-color:rgba(201,168,76,0.35);
+  box-shadow:0 16px 40px rgba(0,0,0,0.5);
+  background:var(--card-hover);
+}
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+
+.card-thumb {
+  aspect-ratio:1/1; position:relative; overflow:hidden;
+  background:linear-gradient(135deg,#1a1005,#0a0703);
+  display:flex; align-items:center; justify-content:center;
+}
+
+.card-thumb img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform 0.4s;
+}
+.card:hover .card-thumb img { transform:scale(1.06); }
+
+.card-thumb-fallback {
+  font-size:2.5rem; opacity:0.3; position:absolute;
+}
+
+.card-badge {
+  position:absolute; top:8px; right:8px;
+  background:rgba(8,6,4,0.85); border:1px solid rgba(201,168,76,0.3);
+  border-radius:20px; padding:3px 9px;
+  font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--gold);
+}
+
+.card-body { padding:14px 16px 12px; }
+
+.card-title {
+  font-family:'Playfair Display',serif; font-size:0.95rem;
+  line-height:1.3; color:var(--text); margin-bottom:4px;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.card-partner {
+  font-size:0.8rem; color:var(--blue); margin-bottom:10px;
+  font-style:italic; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+.card-footer {
+  display:flex; justify-content:space-between; align-items:center;
+  border-top:1px solid rgba(201,168,76,0.07); padding-top:10px;
+}
+
+.card-stats { display:flex; gap:10px; }
+.card-stat { font-size:0.75rem; color:var(--muted); display:flex; align-items:center; gap:3px; }
+.card-stat .icon { font-size:0.8rem; }
+.card-stat.loves .icon { color:var(--accent); }
+.card-stat.plays .icon { color:var(--gold-dim); }
+.card-stat.joins .icon { color:var(--green); }
+
+.card-year { font-size:0.72rem; color:var(--gold-dim); letter-spacing:0.08em; }
+
+.card-link {
+  display:block; margin-top:10px;
+  background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.2);
+  border-radius:6px; padding:6px 10px; text-align:center;
+  color:var(--gold-light); font-size:0.78rem; text-decoration:none;
+  transition:all 0.2s; letter-spacing:0.04em;
+}
+.card-link:hover { background:rgba(201,168,76,0.18); border-color:var(--gold); }
+
+/* Load more */
+.load-more-wrap { text-align:center; padding:24px; }
+.load-more-btn {
+  background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.3);
+  border-radius:8px; padding:12px 32px; color:var(--gold-light);
+  font-family:'Playfair Display',serif; font-size:1rem; cursor:pointer;
+  transition:all 0.2s;
+}
+.load-more-btn:hover { background:rgba(201,168,76,0.2); }
+
+.empty { grid-column:1/-1; text-align:center; padding:60px 24px; color:var(--muted); font-style:italic; }
+
+/* ── STATS PAGE ── */
+.stats-page { max-width:1000px; margin:0 auto; padding:0 24px 60px; }
+
+.stats-section { margin-bottom:48px; }
+
+.stats-heading {
+  font-family:'Playfair Display',serif; font-size:1.5rem;
+  color:var(--gold-light); margin-bottom:20px;
+  padding-bottom:10px; border-bottom:1px solid rgba(201,168,76,0.15);
+  display:flex; align-items:center; gap:10px;
+}
+
+.summary-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px;
+}
+
+.summary-card {
+  background:var(--card); border:1px solid rgba(201,168,76,0.12);
+  border-radius:10px; padding:20px; text-align:center;
+}
+.summary-card .big { font-family:'Playfair Display',serif; font-size:2rem; color:var(--gold-light); }
+.summary-card .label { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); margin-top:5px; }
+
+/* Top songs */
+.top-songs { display:flex; flex-direction:column; gap:10px; }
+
+.top-song-row {
+  display:flex; align-items:center; gap:14px;
+  background:var(--card); border:1px solid rgba(201,168,76,0.1);
+  border-radius:10px; padding:12px 16px; transition:border-color 0.2s;
+  text-decoration:none; color:inherit;
+}
+.top-song-row:hover { border-color:rgba(201,168,76,0.35); }
+
+.top-song-rank {
+  font-family:'Playfair Display',serif; font-size:1.4rem;
+  color:var(--gold-dim); min-width:28px; text-align:center;
+}
+.top-song-thumb {
+  width:44px; height:44px; border-radius:6px; object-fit:cover;
+  background:var(--surface); flex-shrink:0;
+}
+.top-song-info { flex:1; overflow:hidden; }
+.top-song-title { font-size:0.95rem; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.top-song-sub { font-size:0.78rem; color:var(--muted); margin-top:2px; }
+.top-song-loves { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--accent); }
+
+/* Bar chart */
+.bar-chart { display:flex; flex-direction:column; gap:8px; }
+.bar-row { display:flex; align-items:center; gap:10px; }
+.bar-label { width:100px; font-size:0.82rem; color:var(--muted); text-align:right; flex-shrink:0; }
+.bar-track { flex:1; height:10px; background:rgba(255,255,255,0.05); border-radius:5px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:5px; background:linear-gradient(90deg,var(--gold-dim),var(--gold)); transition:width 1s ease; }
+.bar-count { font-size:0.78rem; color:var(--gold-dim); min-width:36px; }
+
+/* ── PARTNERS PAGE ── */
+.partners-page { max-width:900px; margin:0 auto; padding:0 24px 60px; }
+
+.partner-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
+
+.partner-card {
+  background:var(--card); border:1px solid rgba(201,168,76,0.1);
+  border-radius:10px; padding:18px; text-align:center;
+  transition:all 0.25s; cursor:pointer;
+}
+.partner-card:hover {
+  border-color:rgba(74,158,218,0.5); transform:translateY(-3px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+.partner-handle { font-family:'Playfair Display',serif; font-size:1rem; color:var(--blue); margin-bottom:6px; }
+.partner-count { font-size:0.78rem; color:var(--muted); }
+.partner-count strong { color:var(--gold-light); font-size:1.1rem; font-family:'Playfair Display',serif; }
+
+.partner-search-wrap { margin-bottom:24px; position:relative; max-width:400px; }
+.partner-search-wrap input {
+  width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.18);
+  border-radius:8px; padding:10px 16px 10px 40px; color:var(--text);
+  font-family:'Crimson Pro',serif; font-size:1rem; outline:none;
+}
+.partner-search-wrap input::placeholder { color:var(--muted); }
+.partner-search-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--muted); }
+
+/* ── TIMELINE PAGE ── */
+.timeline-page { max-width:900px; margin:0 auto; padding:0 24px 60px; }
+
+.timeline-bars { display:flex; flex-direction:column; gap:14px; }
+
+.tl-row { display:flex; align-items:center; gap:14px; }
+.tl-year {
+  font-family:'Playfair Display',serif; font-size:1.1rem;
+  color:var(--gold); min-width:52px; text-align:right;
+}
+.tl-bar-wrap { flex:1; height:32px; position:relative; }
+.tl-bar {
+  height:100%; border-radius:6px;
+  background:linear-gradient(90deg,rgba(201,168,76,0.2),rgba(201,168,76,0.5));
+  border:1px solid rgba(201,168,76,0.3);
+  display:flex; align-items:center; padding:0 12px;
+  transition:width 1.2s cubic-bezier(0.34,1.56,0.64,1);
+  min-width:40px; cursor:pointer;
+}
+.tl-bar:hover { background:linear-gradient(90deg,rgba(201,168,76,0.3),rgba(201,168,76,0.7)); }
+.tl-bar-count { font-size:0.8rem; color:var(--gold-light); white-space:nowrap; }
+.tl-loves { font-size:0.78rem; color:var(--muted); min-width:80px; }
+
+/* ── SHARE ── */
+.share-strip {
+  display:flex; justify-content:center; gap:10px; flex-wrap:wrap;
+  padding:0 24px 40px;
+}
+.share-btn {
+  display:flex; align-items:center; gap:6px;
+  padding:8px 18px; border-radius:7px;
+  border:1px solid rgba(201,168,76,0.2); background:transparent;
+  color:var(--muted); font-family:'Crimson Pro',serif; font-size:0.85rem;
+  cursor:pointer; transition:all 0.2s; letter-spacing:0.04em;
+}
+.share-btn:hover { background:rgba(201,168,76,0.1); border-color:var(--gold-dim); color:var(--gold-light); }
+
+/* ── LOADING OVERLAY ── */
+.loading-banner {
+  text-align:center; padding:16px; background:rgba(201,168,76,0.05);
+  border-bottom:1px solid rgba(201,168,76,0.1);
+  font-size:0.85rem; color:var(--gold-dim);
+  display:none;
+}
+.loading-banner.show { display:block; }
+
+/* ── TOAST ── */
+.toast {
+  position:fixed; bottom:80px; left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--card); border:1px solid rgba(201,168,76,0.3);
+  border-radius:10px; padding:10px 20px;
+  color:var(--gold-light); font-size:0.88rem;
+  z-index:700; opacity:0; transition:all 0.3s; pointer-events:none; white-space:nowrap;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px) {
+  .hero-title { font-size:3.2rem; }
+  .stat-cell { padding:18px 20px; min-width:90px; }
+  .stat-num { font-size:1.4rem; }
+  nav { padding:0 16px; }
+  .nav-tab { padding:7px 10px; font-size:0.82rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">🎙️ #RadioKishore</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('recordings',this)">Recordings</button>
+    <button class="nav-tab" onclick="showPage('stats',this)">Stats</button>
+    <button class="nav-tab" onclick="showPage('partners',this)">Partners</button>
+    <button class="nav-tab" onclick="showPage('timeline',this)">Timeline</button>
+  </div>
+  <div class="nav-status">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">Loading…</span>
+  </div>
+</nav>
+
+<!-- LOADING BANNER -->
+<div class="loading-banner" id="loadingBanner">
+  ⏳ Fetching your recordings from Smule in the background… <span id="fetchCount">0</span> loaded so far
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">The Smule Stage of</p>
+  <h1 class="hero-title">Radio<em>Kishore</em></h1>
+  <p class="hero-sub">_MusiCoolPiyush_ &nbsp;·&nbsp; Brighton UK &nbsp;·&nbsp; Golden Era Bollywood</p>
+  <div class="hero-divider">
+    <div class="hero-divider-line"></div>
+    <div class="hero-divider-gem">✦</div>
+    <div class="hero-divider-line"></div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="statsbar">
+  <div class="stat-cell"><span class="stat-num" id="sbTotal">—</span><span class="stat-label">Recordings</span></div>
+  <div class="stat-cell"><span class="stat-num" id="sbLoves">—</span><span class="stat-label">Total Loves</span></div>
+  <div class="stat-cell"><span class="stat-num" id="sbPlays">—</span><span class="stat-label">Total Plays</span></div>
+  <div class="stat-cell"><span class="stat-num" id="sbJoins">—</span><span class="stat-label">Total Joins</span></div>
+  <div class="stat-cell"><span class="stat-num">15.4K</span><span class="stat-label">Followers</span></div>
+</div>
+
+<!-- SHARE STRIP -->
+<div class="share-strip">
+  <button class="share-btn" onclick="shareWhatsApp()">💬 WhatsApp</button>
+  <button class="share-btn" onclick="copyLink()">🔗 Copy Link</button>
+  <button class="share-btn" onclick="shareNative()">↗ Share</button>
+</div>
+
+<!-- ══ PAGE: RECORDINGS ══ -->
+<div class="page active" id="page-recordings">
+  <div class="recordings-controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search songs, partners…" oninput="filterAndRender()">
+    </div>
+    <div class="filter-row">
+      <button class="chip active" onclick="setType('all',this)">All</button>
+      <button class="chip" onclick="setType('solo',this)">Solo</button>
+      <button class="chip" onclick="setType('duet',this)">Duet</button>
+      <button class="chip" onclick="setType('invite',this)">Invite</button>
+    </div>
+    <select class="year-select" id="yearFilter" onchange="filterAndRender()">
+      <option value="all">All Years</option>
+    </select>
+    <select class="sort-select" id="sortSelect" onchange="filterAndRender()">
+      <option value="recent">Most Recent</option>
+      <option value="loves">Most Loved</option>
+      <option value="plays">Most Played</option>
+      <option value="joins">Most Joins</option>
+      <option value="az">A → Z</option>
+      <option value="za">Z → A</option>
+    </select>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+    <button class="load-more-btn" onclick="loadMore()">Load More Recordings</button>
+  </div>
+</div>
+
+<!-- ══ PAGE: STATS ══ -->
+<div class="page" id="page-stats">
+  <div class="stats-page">
+    <div class="stats-section">
+      <div class="stats-heading">🎵 Your Numbers</div>
+      <div class="summary-grid" id="summaryGrid"></div>
+    </div>
+    <div class="stats-section">
+      <div class="stats-heading">❤️ Top 10 Most Loved Songs</div>
+      <div class="top-songs" id="topSongs"></div>
+    </div>
+    <div class="stats-section">
+      <div class="stats-heading">📊 Songs by Type</div>
+      <div class="bar-chart" id="typeChart"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE: PARTNERS ══ -->
+<div class="page" id="page-partners">
+  <div class="partners-page">
+    <div class="stats-heading">🎤 Your Singing Partners</div>
+    <div class="partner-search-wrap">
+      <span class="partner-search-icon">🔍</span>
+      <input type="text" id="partnerSearch" placeholder="Search partners…" oninput="renderPartners()">
+    </div>
+    <div class="partner-grid" id="partnerGrid"></div>
+  </div>
+</div>
+
+<!-- ══ PAGE: TIMELINE ══ -->
+<div class="page" id="page-timeline">
+  <div class="timeline-page">
+    <div class="stats-heading">📅 Your Singing Journey</div>
+    <div class="timeline-bars" id="timelineBars"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+let allRecordings = [];
+let displayedCount = 0;
+const PAGE_SIZE = 48;
+let activeType = 'all';
+let statsData = null;
+let pollInterval = null;
+
+// ── INIT ──
+async function init() {
+  await loadRecordings();
+  await loadStats();
+  startPolling();
+}
+
+// ── POLLING ── check status while Smule is being fetched
+function startPolling() {
+  pollInterval = setInterval(async () => {
+    const status = await fetch('/api/status').then(r=>r.json()).catch(()=>null);
+    if (!status) return;
+    updateStatusUI(status);
+    if (status.isFetching) {
+      document.getElementById('fetchCount').textContent = fmt(status.total);
+      // Reload recordings progressively
+      await loadRecordings(true);
+      await loadStats();
+    }
+    if (status.done && !status.isFetching) {
+      clearInterval(pollInterval);
+      document.getElementById('loadingBanner').classList.remove('show');
+      await loadRecordings();
+      await loadStats();
+    }
+  }, 4000);
+}
+
+function updateStatusUI(status) {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  const banner = document.getElementById('loadingBanner');
+  if (status.isFetching) {
+    dot.className='status-dot loading';
+    txt.textContent = `Fetching… ${fmt(status.total)}`;
+    banner.classList.add('show');
+  } else if (status.done) {
+    dot.className='status-dot done';
+    txt.textContent = `${fmt(status.total)} loaded`;
+    banner.classList.remove('show');
+  }
+}
+
+// ── LOAD RECORDINGS ──
+async function loadRecordings(silent=false) {
+  try {
+    // Fetch all available so far in pages
+    let all = [];
+    let page = 0;
+    let hasMore = true;
+    while (hasMore) {
+      const res = await fetch(`/api/recordings?page=${page}&limit=200`).then(r=>r.json());
+      all = all.concat(res.recordings);
+      hasMore = res.hasMore;
+      page++;
+      if (page > 200) break; // safety
+    }
+    allRecordings = all;
+    buildYearFilter();
+    filterAndRender();
+    updateStatsBar();
+  } catch(e) {
+    if (!silent) console.error('Failed to load recordings', e);
+  }
+}
+
+// ── LOAD STATS ──
+async function loadStats() {
+  try {
+    statsData = await fetch('/api/stats').then(r=>r.json());
+    renderSummary();
+    renderTopSongs();
+    renderTypeChart();
+    renderPartners();
+    renderTimeline();
+    updateStatsBar();
+  } catch(e) { console.error('Failed to load stats', e); }
+}
+
+// ── STATS BAR ──
+function updateStatsBar() {
+  if (!statsData) return;
+  document.getElementById('sbTotal').textContent = fmt(statsData.total);
+  document.getElementById('sbLoves').textContent = fmtK(statsData.totalLoves);
+  document.getElementById('sbPlays').textContent = fmtK(statsData.totalPlays);
+  document.getElementById('sbJoins').textContent = fmtK(statsData.totalJoins);
+}
+
+// ── YEAR FILTER ──
+function buildYearFilter() {
+  const years = [...new Set(allRecordings.map(r=>r.year))].filter(y=>y!=='Unknown').sort((a,b)=>b-a);
+  const sel = document.getElementById('yearFilter');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="all">All Years</option>' + years.map(y=>`<option value="${y}"${y===cur?' selected':''}>${y}</option>`).join('');
+}
+
+// ── FILTER & RENDER ──
+function setType(type, el) {
+  activeType = type;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  displayedCount = 0;
+  filterAndRender();
+}
+
+function filterAndRender() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const year = document.getElementById('yearFilter').value;
+  const sort = document.getElementById('sortSelect').value;
+
+  let filtered = allRecordings.filter(r => {
+    const typeOk = activeType==='all' || r.type===activeType;
+    const yearOk = year==='all' || r.year===year;
+    const qOk = !q || r.title.toLowerCase().includes(q) || r.partners.some(p=>p.toLowerCase().includes(q));
+    return typeOk && yearOk && qOk;
+  });
+
+  // Sort
+  if (sort==='loves') filtered.sort((a,b)=>b.loves-a.loves);
+  else if (sort==='plays') filtered.sort((a,b)=>b.plays-a.plays);
+  else if (sort==='joins') filtered.sort((a,b)=>b.joins-a.joins);
+  else if (sort==='az') filtered.sort((a,b)=>a.title.localeCompare(b.title));
+  else if (sort==='za') filtered.sort((a,b)=>b.title.localeCompare(a.title));
+  else filtered.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+
+  window._filtered = filtered;
+  displayedCount = PAGE_SIZE;
+  renderGrid(filtered.slice(0, PAGE_SIZE));
+
+  const lmw = document.getElementById('loadMoreWrap');
+  lmw.style.display = filtered.length > PAGE_SIZE ? 'block' : 'none';
+}
+
+function loadMore() {
+  const filtered = window._filtered || [];
+  displayedCount += PAGE_SIZE;
+  renderGrid(filtered.slice(0, displayedCount));
+  const lmw = document.getElementById('loadMoreWrap');
+  lmw.style.display = displayedCount < filtered.length ? 'block' : 'none';
+}
+
+function renderGrid(recs) {
+  const grid = document.getElementById('grid');
+  if (!recs.length) {
+    grid.innerHTML = '<div class="empty">No recordings found for this filter</div>';
+    return;
+  }
+  grid.innerHTML = recs.map((r,i) => cardHTML(r,i)).join('');
+}
+
+function cardHTML(r, i) {
+  const typeEmoji = {solo:'🎤',duet:'👥',invite:'📢'}[r.type]||'🎵';
+  const typeLabel = {solo:'Solo',duet:'Duet',invite:'Invite'}[r.type]||r.type;
+  const partner = r.partners.length ? `with ${r.partners[0]}${r.partners.length>1?` +${r.partners.length-1}`:''}` : '';
+  const thumb = r.coverUrl
+    ? `<img src="${escHtml(r.coverUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+    : '';
+
+  return `<div class="card" style="animation-delay:${(i%PAGE_SIZE)*0.03}s">
+    <div class="card-thumb">
+      <div class="card-thumb-fallback">${typeEmoji}</div>
+      ${thumb}
+      <div class="card-badge">${typeLabel}</div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">${escHtml(r.title)}</div>
+      ${partner ? `<div class="card-partner">${escHtml(partner)}</div>` : '<div class="card-partner">&nbsp;</div>'}
+      <div class="card-footer">
+        <div class="card-stats">
+          <div class="card-stat loves"><span class="icon">♥</span>${fmtK(r.loves)}</div>
+          <div class="card-stat plays"><span class="icon">▶</span>${fmtK(r.plays)}</div>
+          ${r.joins>0?`<div class="card-stat joins"><span class="icon">👥</span>${r.joins}</div>`:''}
+        </div>
+        <div class="card-year">${r.year}</div>
+      </div>
+      <a href="${escHtml(r.webUrl)}" target="_blank" class="card-link" onclick="event.stopPropagation()">Open on Smule ↗</a>
+    </div>
+  </div>`;
+}
+
+// ── STATS PAGE ──
+function renderSummary() {
+  if (!statsData) return;
+  const d = statsData;
+  document.getElementById('summaryGrid').innerHTML = [
+    {label:'Total Recordings', val:fmt(d.total)},
+    {label:'Solo Songs', val:fmt(d.solos)},
+    {label:'Duets', val:fmt(d.duets)},
+    {label:'Invites', val:fmt(d.invites)},
+    {label:'Total Loves', val:fmtK(d.totalLoves)},
+    {label:'Total Plays', val:fmtK(d.totalPlays)},
+    {label:'Total Joins', val:fmtK(d.totalJoins)},
+    {label:'Singing Partners', val:fmt(d.topPartners.length)},
+  ].map(x=>`<div class="summary-card"><div class="big">${x.val}</div><div class="label">${x.label}</div></div>`).join('');
+}
+
+function renderTopSongs() {
+  if (!statsData) return;
+  document.getElementById('topSongs').innerHTML = statsData.topSongs.map((s,i)=>`
+    <a href="${escHtml(s.webUrl)}" target="_blank" class="top-song-row">
+      <div class="top-song-rank">${i+1}</div>
+      ${s.coverUrl ? `<img class="top-song-thumb" src="${escHtml(s.coverUrl)}" onerror="this.style.display='none'">` : '<div class="top-song-thumb"></div>'}
+      <div class="top-song-info">
+        <div class="top-song-title">${escHtml(s.title)}</div>
+        <div class="top-song-sub">${s.year} · ${s.type}</div>
+      </div>
+      <div class="top-song-loves">♥ ${fmtK(s.loves)}</div>
+    </a>`).join('');
+}
+
+function renderTypeChart() {
+  if (!statsData) return;
+  const d = statsData;
+  const max = Math.max(d.solos, d.duets, d.invites, 1);
+  document.getElementById('typeChart').innerHTML = [
+    {label:'Solo', count:d.solos, color:'var(--gold)'},
+    {label:'Duet', count:d.duets, color:'var(--blue)'},
+    {label:'Invite', count:d.invites, color:'var(--green)'},
+  ].map(x=>`<div class="bar-row">
+    <div class="bar-label">${x.label}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${(x.count/max*100).toFixed(1)}%;background:${x.color}"></div></div>
+    <div class="bar-count">${fmt(x.count)}</div>
+  </div>`).join('');
+}
+
+// ── PARTNERS PAGE ──
+function renderPartners() {
+  if (!statsData) return;
+  const q = (document.getElementById('partnerSearch')?.value||'').toLowerCase();
+  const partners = statsData.topPartners.filter(p=>!q||p.handle.toLowerCase().includes(q));
+  document.getElementById('partnerGrid').innerHTML = partners.length
+    ? partners.map(p=>`
+        <div class="partner-card" onclick="filterByPartner('${escHtml(p.handle)}')">
+          <div class="partner-handle">${escHtml(p.handle)}</div>
+          <div class="partner-count"><strong>${p.count}</strong> songs together</div>
+        </div>`).join('')
+    : '<p style="color:var(--muted);font-style:italic">No partners found</p>';
+}
+
+function filterByPartner(handle) {
+  showPage('recordings', document.querySelector('.nav-tab'));
+  document.getElementById('searchInput').value = handle;
+  setType('all', document.querySelector('.chip'));
+  filterAndRender();
+  showToast(`Showing songs with ${handle}`);
+}
+
+// ── TIMELINE PAGE ──
+function renderTimeline() {
+  if (!statsData) return;
+  const yb = statsData.yearBreakdown;
+  const years = Object.keys(yb).filter(y=>y!=='Unknown').sort((a,b)=>b-a);
+  const maxCount = Math.max(...years.map(y=>yb[y]),1);
+  document.getElementById('timelineBars').innerHTML = years.map(y=>`
+    <div class="tl-row">
+      <div class="tl-year">${y}</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-bar" style="width:${Math.max(8,(yb[y]/maxCount*100)).toFixed(1)}%" onclick="filterByYear('${y}')">
+          <div class="tl-bar-count">${fmt(yb[y])} songs</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function filterByYear(year) {
+  showPage('recordings', document.querySelector('.nav-tab'));
+  document.getElementById('yearFilter').value = year;
+  filterAndRender();
+  showToast(`Showing songs from ${year}`);
+}
+
+// ── PAGE SWITCHING ──
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(`page-${name}`).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+// ── SHARE ──
+function copyLink() {
+  navigator.clipboard.writeText(location.href).then(()=>showToast('🔗 Link copied!'));
+}
+function shareWhatsApp() {
+  window.open(`https://wa.me/?text=Check out my Smule stage! ${encodeURIComponent(location.href)}`,'_blank');
+}
+function shareNative() {
+  if (navigator.share) {
+    navigator.share({title:'#RadioKishore on Smule', url:location.href});
+  } else copyLink();
+}
+
+// ── UTILS ──
+function fmt(n) { return (n||0).toLocaleString(); }
+function fmtK(n) {
+  if (!n) return '0';
+  if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
+  if (n >= 1000) return (n/1000).toFixed(1)+'K';
+  return n.toString();
+}
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+// ── START ──
+init();
+</script>
+</body>
+        </html>
